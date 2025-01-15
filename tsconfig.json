@@ -34,5 +34,12 @@
 
     "lib": ["es2022", "dom", "dom.iterable"]
   },
-  "include": ["src", "jest.config.js"]
+  "include": ["src", "jest.config.js"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "storybook-static",
+    "src/**/*.stories.tsx",
+    "src/**/*.test.tsx"
+  ]
 }
