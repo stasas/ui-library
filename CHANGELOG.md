@@ -1,5 +1,11 @@
 # @stasas/ui-library
 
+## 0.2.0
+
+### Minor Changes
+
+- a1f04bb: add storybook
+
 ## 0.1.1
 
 ### Patch Changes
