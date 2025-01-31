@@ -2,7 +2,7 @@ import { StoryObj, Meta } from "@storybook/react";
 import SmartRating from "./SmartRating";
 
 const meta = {
-  title: "Core/Rating",
+  title: "Core/Components/Rating",
   component: SmartRating,
 } as Meta<typeof SmartRating>;
 

@@ -1,8 +1,8 @@
 import { addons } from "@storybook/manager-api";
-import { themes } from "@storybook/theming";
+import VelocityTheme from "./theme";
 
 addons.setConfig({
-  theme: themes.light,
+  theme: VelocityTheme,
 });
 
 // https://storybook.js.org/docs/configure/user-interface/theming
