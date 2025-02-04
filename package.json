@@ -1,14 +1,10 @@
 {
-  "name": "@stasas/ui-library",
-  "version": "0.2.0",
-  "description": "testing ui component library",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "name": "ui-monorepo",
+  "version": "0.0.0",
+  "description": "testing ui component library monorepo",
   "scripts": {
+    "preinstall": "npx --yes only-allow pnpm",
+    "preupdate": "npx --yes only-allow pnpm",
     "dev": "rollup -c --watch",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",
@@ -24,9 +20,9 @@
     "url": "https://github.com/stasas/ui-library/issues"
   },
   "homepage": "https://github.com/stasas/ui-library#readme",
+  "packageManager": "pnpm@10.2.0",
   "devDependencies": {
     "@changesets/cli": "^2.27.11",
-    "@chromatic-com/storybook": "^3.2.4",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-json": "^6.1.0",
@@ -35,7 +31,6 @@
     "@rollup/plugin-typescript": "^12.1.2",
     "@storybook/addon-essentials": "^8.5.2",
     "@storybook/addon-interactions": "^8.5.2",
-    "@storybook/addon-onboarding": "^8.5.2",
     "@storybook/blocks": "^8.5.2",
     "@storybook/react": "^8.5.2",
     "@storybook/react-vite": "^8.5.2",
@@ -50,11 +45,8 @@
     "tslib": "^2.8.1",
     "typescript": "^5.7.3"
   },
-  "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
+  "engines": {
+    "node": ">= 20.16.0",
+    "pnpm": ">= 10.2.0"
   }
 }

@@ -2,13 +2,11 @@ import type { StorybookConfig } from "@storybook/react-vite";
 
 const config: StorybookConfig = {
   core: { disableWhatsNewNotifications: true, disableTelemetry: true },
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
-  addons: [
-    "@storybook/addon-onboarding",
-    "@storybook/addon-essentials",
-    // "@chromatic-com/storybook", // chromatic integration
-    "@storybook/addon-interactions",
+  stories: [
+    "../packages/ui-core/src/**/*.mdx",
+    "../packages/ui-core/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
+  addons: ["@storybook/addon-essentials", "@storybook/addon-interactions"],
   framework: {
     name: "@storybook/react-vite",
     options: {},
