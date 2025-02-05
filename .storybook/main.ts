@@ -6,7 +6,11 @@ const config: StorybookConfig = {
     "../packages/ui-core/src/**/*.mdx",
     "../packages/ui-core/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
-  addons: ["@storybook/addon-essentials", "@storybook/addon-interactions"],
+  addons: [
+    "@storybook/addon-essentials",
+    "@storybook/addon-interactions",
+    "@storybook/addon-designs",
+  ],
   framework: {
     name: "@storybook/react-vite",
     options: {},
