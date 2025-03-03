@@ -31,7 +31,8 @@ jobs:
       - name: install pnpm
         run: npm i pnpm@latest -g
       #👇 Add Storybook build and deploy to GitHub Pages as a step in the workflow
-      - uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
+      - id: build-publish
+        uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
         with:
           install_command: pnpm install # default: npm ci
           build_command: pnpm build-storybook # default: npm run build-storybook
