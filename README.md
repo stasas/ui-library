@@ -1,5 +1,5 @@
 
-# Velocity Design System Monorepo
+# TEST Design System Monorepo
 
 
 ## Development
@@ -48,6 +48,6 @@ Make sure that the PR includes the changes made by running this command.
 
 ### Conventions and processes
 
-- [Git branches and commits](./git.md)
-- [Creating pull requests](./pull-requests.md)
-- [Creating a release](./creating-a-release.md)
+- [Git branches and commits](./docs/git.md)
+- [Creating pull requests](./docs/pull-requests.md)
+- [Creating a release](./docs/creating-a-release.md)

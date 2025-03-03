@@ -17,7 +17,7 @@ const config: StorybookConfig = {
   },
   refs: {
     "design-system": {
-      title: "McKinsey Design System",
+      title: "TEST LINK Design System",
       url: "https://master--5ccbc373887ca40020446347.chromatic.com/",
       expanded: false, // Optional, true by default,
     },

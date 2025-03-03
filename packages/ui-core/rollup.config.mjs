@@ -37,7 +37,7 @@ export default [
         exclude: ["**/*.test.tsx", "**/*.test.ts", "**/*.stories.ts"],
       }),
       postcss({ extensions: [".css"], inject: true, extract: false }),
-      // terser(),
+      terser(),
       // visualizer({
       //   filename: "bundle-analysis.html",
       //   open: true,
