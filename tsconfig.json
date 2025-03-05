@@ -26,6 +26,7 @@
     "moduleResolution": "Node",
     "jsx": "react-jsx",
 
+    "outDir": "dist",
     // "declaration": true,
     // "declarationDir": "dist",
     // "declarationMap": true,
