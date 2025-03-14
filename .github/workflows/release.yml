@@ -47,61 +47,56 @@ jobs:
         run: pnpm changeset version
         continue-on-error: true
 
-      - name: Commit and Push Changes
-        if: steps.version.outcome == 'success'
-        run: |
-          echo ${{ steps.version.outcome }}
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b changeset-release
-          git add .
-          git commit -m "chore: version bump"
-          git push -u origin changeset-release
-        continue-on-error: true
+      # - name: Commit and Push Changes
+      #   if: steps.version.outcome == 'success'
+      #   run: |
+      #     echo ${{ steps.version.outcome }}
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git checkout -b changeset-release
+      #     git add .
+      #     git commit -m "chore: version bump"
+      #     git push -u origin changeset-release
+      #   continue-on-error: true
 
       - name: Create Release PR
-        uses: github-actions/pull-request@v1
+        if: steps.version.outcome == 'success'
+        uses: peter-evans/create-pull-request@v7
         with:
-          title: "chore: release new versions"
+          commit-message: "chore: version packages"
+          title: "Release: Version Packages"
           body: "Automated version bump using Changesets."
           branch: changeset-release
+          asignees: ${{ github.actor }}
+          reviewers: ${{ github.actor }}
           base: main
-          labels: "release, automated"
+          delete-branch: true
+          labels: |
+            release
+            automated
 
-      # - name: Create Pull Request
-      #   if: steps.version.outcome == 'success'
-      #   uses: peter-evans/create-pull-request@v6
-      #   with:
-      #     title: "Release: Version Packages"
-      #     body: "This PR updates package versions based on changesets."
-      #     branch: changeset-release
-      #     base: main
-      #     delete-branch: true
-      #     labels: "release, automated"
-      #     assignees: ${{ github.actor }}
+  # publish:
+  #   needs: release
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@v4
 
-  publish:
-    needs: release
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
+  #     - name: Install pnpm
+  #       uses: pnpm/action-setup@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+  #     - name: Setup Node.js 20.x
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20.x
+  #         cache: "pnpm"
 
-      - name: Setup Node.js 20.x
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
-          cache: "pnpm"
+  #     - name: Install Dependencies
+  #       run: pnpm install
 
-      - name: Install Dependencies
-        run: pnpm install
-
-      - name: Publish Packages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm changeset publish
+  #     - name: Publish Packages
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  #       run: pnpm changeset publish
