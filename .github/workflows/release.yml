@@ -18,6 +18,9 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+        with:
+          # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -31,49 +34,31 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      # - name: Build
-      #   run: pnpm -r run build
-
-      # - name: Create Release Pull Request or Publish to npm
-      #   id: changesets
-      #   uses: changesets/action@v1
-      #   with:
-      #     publish: pnpm changeset publish
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Create Version PR
+      - name: Create version bump
         id: version
-        run: pnpm changeset version
-        continue-on-error: true
+        run: |
+          pnpm changeset version
+          if git diff --quiet; then
+            echo "No version changes. Skipping PR creation."
+            exit 0
+          fi
 
-      # - name: Commit and Push Changes
-      #   if: steps.version.outcome == 'success'
-      #   run: |
-      #     echo ${{ steps.version.outcome }}
-      #     git config user.name "github-actions[bot]"
-      #     git config user.email "github-actions[bot]@users.noreply.github.com"
-      #     git checkout -b changeset-release
-      #     git add .
-      #     git commit -m "chore: version bump"
-      #     git push -u origin changeset-release
-      #   continue-on-error: true
+      - name: Commit version changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b changeset-release
+          git add .
+          git commit -m "chore: version packages"
+          git push origin -u changeset-release
 
-      - name: Create Release PR
-        if: steps.version.outcome == 'success'
-        uses: peter-evans/create-pull-request@v7
-        with:
-          commit-message: "chore: version packages"
-          title: "Release: Version Packages"
-          body: "Automated version bump using Changesets."
-          branch: changeset-release
-          asignees: ${{ github.actor }}
-          reviewers: ${{ github.actor }}
-          base: main
-          delete-branch: true
-          labels: |
-            release
-            automated
+      - name: Create Pull Request
+        run: |
+          gh pr create -B main -H changeset-release -r ${{ github.actor }} \
+          -t 'Release: Version Packages' -b 'Automated version bump using Changesets.' \
+          -l release -l automated
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # publish:
   #   needs: release
