@@ -55,21 +55,30 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b changeset-release
           git add .
-          git commit -m "chore: apply changesets"
+          git commit -m "chore: version bump"
           git push -u origin changeset-release
         continue-on-error: true
 
-      - name: Create Pull Request
-        if: steps.version.outcome == 'success'
-        uses: peter-evans/create-pull-request@v6
+      - name: Create Release PR
+        uses: github-actions/pull-request@v1
         with:
-          title: "Release: Version Packages"
-          body: "This PR updates package versions based on changesets."
+          title: "chore: release new versions"
+          body: "Automated version bump using Changesets."
           branch: changeset-release
           base: main
-          delete-branch: true
           labels: "release, automated"
-          assignees: ${{ github.actor }}
+
+      # - name: Create Pull Request
+      #   if: steps.version.outcome == 'success'
+      #   uses: peter-evans/create-pull-request@v6
+      #   with:
+      #     title: "Release: Version Packages"
+      #     body: "This PR updates package versions based on changesets."
+      #     branch: changeset-release
+      #     base: main
+      #     delete-branch: true
+      #     labels: "release, automated"
+      #     assignees: ${{ github.actor }}
 
   publish:
     needs: release
