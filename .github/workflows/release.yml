@@ -45,7 +45,7 @@ jobs:
           git checkout -b changeset-release
           git add .
           git commit -m "chore: version packages"
-          git push origin -u changeset-release
+          git push origin -u --force changeset-release
 
       - name: Create Pull Request
         id: create_pr
@@ -54,5 +54,6 @@ jobs:
           -t 'Release: Version Packages' -b 'Automated version bump using Changesets.' \
           -l release -l automated)
           echo "pr_url=${output}" >> $GITHUB_OUTPUT
+          echo "[${output}](${output})" >> $GITHUB_STEP_SUMMARY
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
