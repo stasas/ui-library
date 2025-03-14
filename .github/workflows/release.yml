@@ -15,6 +15,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    outputs:
+      pr_url: ${{ steps.create_pr.outputs.pr_url }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -22,22 +24,10 @@ jobs:
           # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
           fetch-depth: 0
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js 20.x
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
-          cache: "pnpm"
-
-      - name: Install Dependencies
-        run: pnpm install
-
       - name: Create version bump
         id: version
         run: |
-          pnpm changeset version
+          npx changeset version
           if git diff --quiet; then
             echo "No version changes. Skipping PR creation."
             exit 0
@@ -53,35 +43,11 @@ jobs:
           git push origin -u changeset-release
 
       - name: Create Pull Request
+        id: create_pr
         run: |
-          gh pr create -B main -H changeset-release -r ${{ github.actor }} \
+          output=$(gh pr create -B main -H changeset-release -r ${{ github.actor }} \
           -t 'Release: Version Packages' -b 'Automated version bump using Changesets.' \
-          -l release -l automated
+          -l release -l automated)
+          echo "pr_url=${output}" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # publish:
-  #   needs: release
-  #   runs-on: ubuntu-latest
-  #   if: github.ref == 'refs/heads/main'
-  #   steps:
-  #     - name: Checkout Repo
-  #       uses: actions/checkout@v4
-
-  #     - name: Install pnpm
-  #       uses: pnpm/action-setup@v4
-
-  #     - name: Setup Node.js 20.x
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 20.x
-  #         cache: "pnpm"
-
-  #     - name: Install Dependencies
-  #       run: pnpm install
-
-  #     - name: Publish Packages
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-  #       run: pnpm changeset publish
